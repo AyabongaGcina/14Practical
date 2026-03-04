@@ -12,9 +12,9 @@ public class ChainedHash {
             this.value = value;
         }
     }
-
-    private LinkedList<Node>[] table;  // Array of linked lists
-    private int m;                       // Table size
+    // Array of linked lists
+    private LinkedList<Node>[] table;  
+    private int m;                       // Size of the table
     private int size;                     // Number of items inserted
 
     // Constructor
