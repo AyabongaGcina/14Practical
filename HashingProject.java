@@ -65,5 +65,114 @@ public class HashingProject{
         if (itemsToInsert > N) {
             itemsToInsert = N;
         }
+        System.out.printf("\nTesting at %.0f%% load factor...\n", loadFactor * 100);
+        System.out.println("  Table size m = " + m);
+        System.out.println("  Inserting " + itemsToInsert + " items");
+
+        // Use 300 keys temporarily to get the  measurable times
+        int[] testKeys = new int[300];  // INCREASED FROM 30 TO 300
+        Random rand = new Random();
+        for (int i = 0; i < 300; i++) {
+            testKeys[i] = data[rand.nextInt(itemsToInsert)].key;
+        }
+
+        double openTotalTime = 0;
+        double openTotalTimeSq = 0;
+        double chainTotalTime = 0;
+        double chainTotalTimeSq = 0;
+
+        // Track if lookups are working
+        int openSuccessCount = 0;
+        int chainSuccessCount = 0;
+
+        for (int rep = 0; rep < reps; rep++) {
+
+            OpenHash openTable = new OpenHash(m);
+            ChainedHash chainTable = new ChainedHash(m);
+
+            // Insert data
+            for (int i = 0; i < itemsToInsert; i++) {
+                openTable.insert(data[i].key, data[i].value);
+                chainTable.insert(data[i].key, data[i].value);
+            }
+
+            // DEBUG: Check load factors
+            if (rep == 0) {
+                System.out.println("    Open hash load factor: " + openTable.loadFactor());
+                System.out.println("    Chained hash load factor: " + chainTable.loadFactor());
+            }
+
+            // Test one key to verify lookup works
+            if (rep == 0) {
+                String openResult = openTable.lookup(testKeys[0]);
+                String chainResult = chainTable.lookup(testKeys[0]);
+                System.out.println("    Test key " + testKeys[0] +
+                        " - Open: " + (openResult != null ? "FOUND" : "MISSING") +
+                        ", Chain: " + (chainResult != null ? "FOUND" : "MISSING"));
+            }
+
+            // Time open hash
+            long start = System.currentTimeMillis();
+            for (int key : testKeys) {
+                String result = openTable.lookup(key);
+                if (result != null) openSuccessCount++;
+            }
+            long finish = System.currentTimeMillis();
+            double time = finish - start;
+
+            openTotalTime += time;
+            openTotalTimeSq += time * time;
+
+            // Time chained hash
+            start = System.currentTimeMillis();
+            for (int key : testKeys) {
+                String result = chainTable.lookup(key);
+                if (result != null) chainSuccessCount++;
+            }
+            finish = System.currentTimeMillis();
+            time = finish - start;
+
+            chainTotalTime += time;
+            chainTotalTimeSq += time * time;
+
+            shuffleArray(testKeys);
+        }
+
+        // Report success rates
+        int totalLookups = reps * 300;
+        System.out.println("    Open hash success rate: " + openSuccessCount + "/" + totalLookups);
+        System.out.println("    Chained hash success rate: " + chainSuccessCount + "/" + totalLookups);
+
+        double openAvg = openTotalTime / reps;
+        double openStdDev = Math.sqrt((openTotalTimeSq / reps) - (openAvg * openAvg));
+
+        double chainAvg = chainTotalTime / reps;
+        double chainStdDev = Math.sqrt((chainTotalTimeSq / reps) - (chainAvg * chainAvg));
+
+        System.out.printf("%-12.0f %-8d %-15s %-15s %-15s %-15s\n",
+                loadFactor * 100, m,
+                df.format(openAvg), df.format(openStdDev),
+                df.format(chainAvg), df.format(chainStdDev));
+    }
+
+    private static boolean isPrime(int n) {
+        if (n <= 1) return false;
+        if (n <= 3) return true;
+        if (n % 2 == 0 || n % 3 == 0) return false;
+
+        for (int i = 5; i * i <= n; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0) return false;
+        }
+        return true;
+    }
+
+    private static void shuffleArray(int[] array) {
+        Random rand = new Random();
+        for (int i = array.length - 1; i > 0; i--) {
+            int index = rand.nextInt(i + 1);
+            int temp = array[index];
+            array[index] = array[i];
+            array[i] = temp;
+        }
     }
 }
