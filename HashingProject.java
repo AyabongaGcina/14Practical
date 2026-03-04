@@ -81,7 +81,7 @@ public class HashingProject{
         double chainTotalTime = 0;
         double chainTotalTimeSq = 0;
 
-        // Track if lookups are working
+        // Checking if the lookups are working
         int openSuccessCount = 0;
         int chainSuccessCount = 0;
 
