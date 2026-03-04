@@ -111,7 +111,7 @@ public class HashingProject{
                         ", Chain: " + (chainResult != null ? "FOUND" : "MISSING"));
             }
 
-            // Time open hash
+            //Time open hash
             long start = System.currentTimeMillis();
             for (int key : testKeys) {
                 String result = openTable.lookup(key);
