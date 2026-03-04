@@ -96,7 +96,7 @@ public class HashingProject{
                 chainTable.insert(data[i].key, data[i].value);
             }
 
-            // DEBUG: Check load factors
+            // Check load factors
             if (rep == 0) {
                 System.out.println("    Open hash load factor: " + openTable.loadFactor());
                 System.out.println("    Chained hash load factor: " + chainTable.loadFactor());
