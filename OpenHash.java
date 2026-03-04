@@ -29,7 +29,7 @@ public class OpenHash{
         int index = hash(key);
         int originalIndex = index;
 
-        // Linear probing - find next empty slot
+        // finding next empty slot
         while (table[index] != null) {
             // If key already exists, update value
             if (table[index].key == key) {
