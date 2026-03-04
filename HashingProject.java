@@ -140,8 +140,8 @@ public class HashingProject{
 
         // Report success rates
         int totalLookups = reps * 300;
-        System.out.println("    Open hash success rate: " + openSuccessCount + "/" + totalLookups);
-        System.out.println("    Chained hash success rate: " + chainSuccessCount + "/" + totalLookups);
+        System.out.println("Open hash success rate: " + openSuccessCount + "/" + totalLookups);
+        System.out.println("Chained hash success rate: " + chainSuccessCount + "/" + totalLookups);
 
         double openAvg = openTotalTime / reps;
         double openStdDev = Math.sqrt((openTotalTimeSq / reps) - (openAvg * openAvg));
