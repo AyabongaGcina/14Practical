@@ -15,5 +15,24 @@ public class Data{
             this.value = value;
         }
     }
+    // Generating all the data
+    public static Pair[] generateData() {
+        System.out.println("Generating " + N + " key-value pairs...");
+        // Create an array of keys 1 to N
+        Integer[] keys = new Integer[N];
+        for (int i = 0; i < N; i++) {
+            keys[i] = i + 1;
+        }
+        // Shuffle the keys
+        List<Integer> keyList = Arrays.asList(keys);
+        Collections.shuffle(keyList);
+        keys = keyList.toArray(new Integer[0]);
+
+        // Create pairs
+        Pair[] data = new Pair[N];
+        for (int i = 0; i < N; i++) {
+            data[i] = new Pair(keys[i], String.valueOf(i + 1));
+        }
+
 
 }
